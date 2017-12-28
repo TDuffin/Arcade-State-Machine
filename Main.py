@@ -102,6 +102,8 @@ class MainMenu(State):
         self.persist = persist
         self.text = "Scene One.\nPress Space to Change Scenes,\nPress Esc. to Exit."
         self.text_position = self.persist.get("text_position", [0, 300])
+        self.x = 0
+        self.sign = 1
 
     def key_down(self, key, mod):
         """Example of switching between states,
@@ -118,8 +120,10 @@ class MainMenu(State):
     def update(self, dt):
         """Example of logic processing in a scene.
         Called once per frame by the Game class. This example sets the colour of the background to a shade of Red"""
-        x = randint(150, 200)
-        self.col = (255, x, x)
+        if self.x < 0 or self.x > 255:
+            self.sign *= -1
+        self.x += 5 * self.sign
+        self.col = (255, self.x, self.x)
 
     def draw(self):
         """Draws the elements to the screen."""
@@ -138,6 +142,8 @@ class Scene(State):
         self.persist = persist
         self.text = "Scene Two.\nPress Space to Change Scenes,\nPress Esc. to Exit."
         self.text_position = self.persist.get("text_position", [0, 300])
+        self.x = 0
+        self.sign = 1
 
     def key_down(self, key, mod):
         if key == ac.key.ESCAPE:
@@ -150,8 +156,10 @@ class Scene(State):
             self.next_state = "MAIN"
 
     def update(self, dt):
-        x = randint(150, 200)
-        self.col = (x, 255, x)
+        if self.x < 0 or self.x > 255:
+            self.sign *= -1
+        self.x += 5 * self.sign
+        self.col = (self.x, 255, self.x)
 
     def draw(self):
         ac.set_background_color(self.col)
